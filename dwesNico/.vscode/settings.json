@@ -1,0 +1,5 @@
+{
+    "phpserver.router": "laragon/www/dwes",
+    "phpserver.port": 8080,
+    "phpserver.phpPath": ""
+}

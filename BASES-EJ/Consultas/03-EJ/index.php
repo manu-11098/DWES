@@ -26,7 +26,7 @@
 
     <?php
         function getOptions(){
-            include "conexion.php"; // incluimos la conexión
+            include "../../connection/conexion.php";// incluimos la conexión
             $sql = "SELECT DISTINCT categoria FROM noticias"; // creamos la sentencia sql
 
             if($result = $connection -> query($sql)){   // $connection contiene la conexión que se almacena en $result. query($sql) ejecuta como sql el string $sql
@@ -43,7 +43,7 @@
         }
 
         function showTable(){
-            include "conexion.php";
+            include "../../connection/conexion.php";
             if(isset($_POST['categoria'])){
                 echo "<table> <tr> <th>Titulo</th> <th>Texto</th> <th>Categoria</th> <th>Fecha</th> <th>Imagen</th> </tr>";
 

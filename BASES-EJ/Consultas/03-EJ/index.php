@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <title>Document</title>
     <link href="./estilos/estilo5ana.css" rel="stylesheet">
 </head>
+
 <body>
     <form action="<?php $_SERVER['PHP_SELF']?>" method="post">
         <fieldset>
@@ -15,7 +17,8 @@
             <label for="categoria"> Mostrar noticias de la categoría: </label>
             <select name="categoria">
                 <option value="*">TODAS</option> <!-- el value asterisco es para diferenciarlo abajo *1-->
-                <?php getOptions();?> <!-- llamamos al método getOptions que nos rellena el select del formulario con las distintas categorías leyendolas de la tabla -->
+                <?php getOptions();?>
+                <!-- llamamos al método getOptions que nos rellena el select del formulario con las distintas categorías leyendolas de la tabla -->
             </select>
             <input type="submit" name="enviar" value="consulta">
         </fieldset>
@@ -62,7 +65,7 @@
                         echo "<td>" .date("j/n/Y",strtotime($resultado -> fecha))."</td>";
 
                         if($resultado->imagen !=""){
-                            echo "<td><a target='_blank' href='img/" . $resultado -> imagen."'><img src='img/ico-fichero.gif' alt='Imagen Asociada'></a></td>"; // el nombre de la imagen está en el campo imagen de la tabla de la base de datos
+                            echo "<td><a target='_blank' href='../../src/img/inmobiliaria/" . $resultado -> imagen."'><img src='../../src/img/inmobiliaria/ico-fichero.gif' alt='Imagen Asociada'></a></td>"; // el nombre de la imagen está en el campo imagen de la tabla de la base de datos
                         }else{
                             echo"<td> </td>";
                             echo"</tr>";
@@ -74,4 +77,5 @@
         }
     ?>
 </body>
+
 </html>

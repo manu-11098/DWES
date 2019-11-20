@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <form action="<?php $_SERVER['PHP_SELF']?>" mehtod = "POST" enctype="multipart/form-data">
+    <form action="<?php $_SERVER['PHP_SELF']?>" method = "POST" enctype="multipart/form-data">
         <fieldset>
             <legend>Insert</legend>
             <label for = "title">Titulo:</label>
@@ -23,8 +23,28 @@
                 <?php getOptions();?>
             </select><br><br>
             <label for="image">Selecciona una imagen</label>
-            <input type="file" name="image">
+            <input type="file" name="image"><br>
             <input type="submit" name="insert" value="insertar">
+
+            <?php
+                include "../../connection/conexion.php";
+                if(isset($_POST['insert']) && ($_POST['title']) && ($_POST['new'])){
+                    
+                    $title = $_POST['title'];
+                    $new = $_POST['new'];
+                    $categorie = $_POST['categoria'];
+                    $date = date('Y-m-d');
+                    $img = $_FILES['image']['name']; // $_FILES['name del input']['name'(recoge el nombre de la imagen)
+
+                    $sql = "INSERT INTO noticias(titulo,texto,categoria,fecha,imagen) VALUES('$title', '$new', '$categorie','$date', '$img');";
+
+                    $fileName = fileSave();
+                    $insert = $connection -> query($sql);
+
+                    showLastModify($fileName);
+                }
+            ?>
+
         </fieldset>
     </form>
 
@@ -46,33 +66,45 @@
             }
         }
 
-        function insertInto(){
-            include "../../connection/conexion.php";
-            if(isset($_POST['title']) && isset($_POST['new']) && isset($_POST['categoria'])){
+        function fileSave(){
+            if(is_uploaded_file($_FILES['image']['tmp_name'])){ // @image = etiqueta name del input (sustituir para cambiar el tipo de fichero)
 
-                $title = $_POST['title'];
-                $new = $_POST['new'];
-                $categorie = $_POST['categoria'];
-                $date = date('Y-m-d');
-                $img = $_FILES['image']['name']; // $_FILES['name del input']['name'(recoge el nombre de la imagen)]
+                $fileName = $_FILES['image']['name'];
+                $dir = "../../src/img/inmobiliaria/"; // directorio donde guardamos la imagen
 
+                move_uploaded_file($dir, $fileName);
 
-                $slq = "INSERT INTO noticias(titulo,texto,categoria,fecha,imagen) VALUES('$titulo', '$texto', '$categoria','$fecha', '$imagen');";
-
-
+                return $fileName;
+            }else{
+                $errMsg = "No se ha podido subir el fichero";
+                return $errMsg;
             }
         }
 
-        function fileSave(){
-            $fileName = $_FILES['image']['name'];
-            $filePath = $_FILES['image']['tmp_name'];
-            $dir = "../../src/img/inmobiliaria/"; //* Where you save the file
+        function showLastModify(){ 
+            include "../../connection/conexion.php";
+            if(isset($_POST['insert'])){
+                echo "<table> <tr> <th>Titulo</th> <th>Texto</th> <th>Categoria</th> <th>Fecha</th> <th>Imagen</th> </tr>";
+                $sql = "SELECT * FROM noticias WHERE titulo = '". $_POST['title']."' AND texto = '".$_POST['new']."';";
 
-            $completeName = $dir. $fileName;
-            if(is_file($completeName)){
-                $finalName = time(). "-" .$fileName;
+                if($result = $connection -> query($sql)){
+                    while($resultado = $result -> fetch_object()){ // crea un objeto con unos atributos con el nombre de la columna que se guardan en $resultado
+                        echo "<tr>";
+                        echo "<td>" .$resultado -> titulo. "</td>";
+                        echo "<td>" .$resultado -> texto. "</td>";
+                        echo "<td>" .$resultado -> categoria. "</td>";
+                        echo "<td>" .date("j/n/Y",strtotime($resultado -> fecha))."</td>";
+
+                        if($resultado->imagen !=""){
+                            echo "<td><a target='_blank' href='../../src/img/inmobiliaria/" . $resultado -> imagen."'><img src='../../src/img/inmobiliaria/ico-fichero.gif' alt='Imagen Asociada'></a></td>"; // el nombre de la imagen está en el campo imagen de la tabla de la base de datos
+                        }else{
+                            echo"<td> </td>";
+                            echo"</tr>";
+                        }
+                    }
+                }
+                echo "</table>";
             }
-            move_uploaded_file($filePath, $completeName);
         }
     ?>
 

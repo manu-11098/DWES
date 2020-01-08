@@ -1,0 +1,9 @@
+h1 {margin-bottom:0;}
+#encabezado {background-color:#ddf0a4;height:100px;
+            margin-bottom: 10px;}
+#contenido {background-color:#EEEEEE;height:300px;}
+#pie {background-color:#ddf0a4;color:#ff0000;height:60px;}
+th{
+    text-align: left;
+}
+#index {background-color:#ddf0a4;height:150px;}
